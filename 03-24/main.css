@@ -1,0 +1,107 @@
+body{
+    background: linear-gradient(-45deg, rgba(148,187,233,1) 0%, rgba(255,179,0,1) 50%, rgba(148,187,233,1) 100%);
+    font-family: Arial, Helvetica, sans-serif;
+}
+.container{
+    background-color: #1a273e;
+    box-shadow: 10px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 30px;
+    margin: 20px auto;
+}
+
+
+/* parte sinistra */
+
+
+.sx p{
+    font-family: 'Satisfy', Arial, Helvetica, sans-serif;
+}
+
+.profile{
+    background-color: #ffb300;
+    margin: 0 -12px;
+    padding: 20px 15px;
+    border-radius: 30px 0;
+}
+
+.about, .contact, .follow{
+    padding: 15px;
+    text-align: center;
+}
+
+.foto img{
+    width: 100%;
+    border-radius: 50%;
+    box-shadow: 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+#h3{
+    color: #ffb300;
+    font-size: 1.17em;
+    font-size: 1.25em;
+    text-shadow: 0 0 10px #fff, 0 0 20px #ffb300, 0 0 30px #ffb300;
+    font-family: 'Amatic SC', cursive;
+    font-weight: 700;
+    font-size: 28px;
+}
+
+.contact a{
+    color: white;
+    text-decoration: none;
+}
+a:hover{
+    color: #ffb300;
+    text-decoration: underline;
+    transition-duration: 1s;
+}
+
+.box{
+    text-align: center;
+}
+
+.box a{
+    display: inline-block;
+    background: #ffb300;
+    padding: 8px;
+    border-radius: 50%;
+    margin: 5px;
+}
+
+svg{
+    fill: #1a273e;
+    transition-duration: 1s;
+}
+
+/* .box a:hover{
+    transform: scale(1.5);
+} */
+
+.box svg:hover{
+    transform: scale(1.3) rotate(360deg);
+}
+
+/* parte destra */
+.dx{
+    padding: 30px;
+}
+
+.experience, .edu{
+    box-sizing: border-box;
+    margin: 30px;
+    padding: 5px;
+    background-color: rgba(40, 53, 147, 0.35);
+    border-radius: 25px;
+    box-shadow: 5px 5px rgba(0, 0, 0, 0.3);
+}
+
+.skill, .soft, .interessi{
+    height: calc(50%/3);
+    width: 90%;
+    box-shadow: 5px 5px rgba(0, 0, 0, 0.3);
+    border-radius: 25px;
+    margin: 30px auto;
+}
+
+.skill h3, .soft h3, .interessi h3, .experience h3, .edu h3{
+    padding-left: 30px;
+}
