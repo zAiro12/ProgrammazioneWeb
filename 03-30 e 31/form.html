@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>form</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script src='main.js'></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-lg bg-body-secondary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Movie</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Ricerca</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Film Preferiti</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+    </nav>
+    <!-- fina navbar -->
+
+    <div class="container-lg">
+		<form action="risultati.html" method="GET" onsubmit="return validazione()">
+			<div class="mb-3 mt-3">
+				<input type="text" class="form-control" id="titolo" placeholder="Titolo" name="titolo">
+			</div>
+			<div class="input-group mb-3">
+				<span class="input-group-text">Anno</span>
+				<input type="number" min="1900" max="2099" step="1" class="form-control" id="annoDa" value="1900" name="anno_da" required>
+				<input type="number" min="1900" max="2099" step="1" class="form-control" id="annoA" value="2099" name="anno_a" required>
+			</div>
+
+			<select class="form-select mb-3" multiple name="genere">
+				<option selected>Genere</option>
+				<option value="1">thriller</option>
+				<option value="2">commedia</option>
+				<option value="3">horror</option>
+				<option value="4">giallo</option>
+			</select>
+
+			<div class="mb-3 mt-3">
+				<input type="text" class="form-control" id="attore" placeholder="Attore" name="attore">
+			</div>
+
+			<select class="form-select mb-3" multiple name="lingua">
+				<option selected>Lingua</option>
+				<option value="1">Italiano</option>
+				<option value="2">Inglese</option>
+				<option value="3">Francese</option>
+				<option value="4">tedesco</option>
+			</select>
+
+			<div class="input-group mb-3">
+				<span class="input-group-text">Voto</span>
+				<input type="number" min="0" max="10" step="0.5" class="form-control" id="votoDa" value="1" name="voto_da" required>
+				<input type="number" min="0" max="10" step="0.5" class="form-control" id="votoA" value="10" name="voto_a" required>
+			</div>
+
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" id="termini">
+				<label id="labelTermini" class="form-check-label" for="flexCheckChecked">Accetto termini e condizioni</label>
+			</div>
+
+			<div class="text-end">
+				<button type="submit" class="btn btn-primary">Cerca</button>
+			</div>
+			
+		</form>
+    </div>
+</body>
+</html>
