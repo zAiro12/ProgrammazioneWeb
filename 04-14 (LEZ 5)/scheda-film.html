@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Movie Demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Movie</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Ricerca</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Film Preferiti</a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-12  col-md-5 "><img id="locandina" class="img-fluid rounded" src=""">
+            </div>
+            <div class="col-12  col-md-7">
+                <div class="row">
+                    <div class="col-12">
+                        <h2 id="titolo"></h2>
+                        <p id="data"></p>
+                    </div>
+                    <div class="col-12">
+                        <h3>Overview</h3>
+                        <p id="descrizione"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3 row-cols-2 
+        row-cols-md-3 row-cols-lg-4 row-cols-xl-6 g-4">
+           <div class="col" >
+            <div class="card" >
+                <img src="https://www.themoviedb.org/t/p/w138_and_h175_face/wo2hJpn04vbtmh0B9utCFdsQhxM.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <p class="card-text ">Leonardo DiCaprio</p>
+                <p class="card-text"><small class="text-body-secondary">Jordan Belfort</small>
+                   </p>
+                </div>
+              </div>
+           </div>
+           <div class="col">
+            <div class="card" >
+                <img src="https://www.themoviedb.org/t/p/w138_and_h175_face/cymlWttB83MsAGR2EkTgANtjeRH.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <p class="card-text ">Jonah Hill</p>
+                <p class="card-text"><small class="text-body-secondary">
+
+                    Donnie Azoff</small>
+                   </p>
+                </div>
+              </div>
+           </div>
+           <div class="col">
+            <div class="card" >
+                <img src="https://www.themoviedb.org/t/p/w138_and_h175_face/euDPyqLnuwaWMHajcU3oZ9uZezR.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <p class="card-text ">Margot Robbie
+
+                  </p>
+                <p class="card-text"><small class="text-body-secondary">  Naomi Lapaglia</small>
+                   </p>
+                </div>
+              </div>
+           </div>
+           <div class="col">
+            <div class="card" >
+                <img src="https://www.themoviedb.org/t/p/w138_and_h175_face/5KhhJSSuVufL90mHpReQ1L5iVeW.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <p class="card-text ">Matthew McConaughey
+
+                    </p>
+                <p class="card-text"><small class="text-body-secondary">Mark Hanna</small>
+                   </p>
+                </div>
+              </div>
+           </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N"
+        crossorigin="anonymous"></script>
+    <script src="popolari.js"></script>
+
+    <script>
+        const baseImg = "https://image.tmdb.org/t/p/w300"
+        var id = new URLSearchParams(window.location.search).get('id_film')
+        
+        var film = popolari.results.find(item => item.id == id)
+        console.log(film.title)
+
+        document.getElementById("titolo").innerHTML = film.title
+        document.getElementById("data").innerHTML = film.release_date
+        document.getElementById("descrizione").innerHTML = film.overview
+        document.getElementById("locandina").src = baseImg + film.poster_path
+    </script>
+</body>
+
+</html>
