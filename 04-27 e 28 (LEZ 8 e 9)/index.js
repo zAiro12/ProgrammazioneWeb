@@ -1,6 +1,23 @@
-const { raw } = require('body-parser')
+/* Scrivere le api che gestiscano utenti
+Validare i seguenti campi affinchè siano tutti popolati
+
+Id
+Nome
+Cognome
+E-mail
+Password
+
+Controllare l'esistenza dell'utente nell'eliminazione e nell'aggiornamento
+
+Inserire un utente
+Rimuovere un utente
+Aggiornare un utente
+*/
 const express = require('express')
-const fs = require('fs')
+const swaggerUi = require');
+const swaggerDocument = require('./swagger-output.json');
+const fs = require('fs');
+const { NOMEM } = require('dns');
 
 let rawUsers = fs.readFileSync('users.json') 
 var users = JSON.parse(rawUsers)
@@ -8,6 +25,7 @@ console.log(users)
 
 const app = express()
 app.use(express.json())
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 const apiKey = "123456"
 
 
@@ -20,11 +38,11 @@ function checkApiKey(res, userApiKey) {
 
 function updateFile(){
     let usersRaw = JSON.stringify(users)
-    fs.writeFileSync("users.json", usersRaw)
+    fs.writeFileSync("users.json",usersRaw)
 }
 
 function addUser(user) {
-    user.id = users.length + 1
+    user.id = users.length +1
     if (user.name == undefined) {
         res.status(400).send("Missing Name")
         return
@@ -70,6 +88,7 @@ app.get('/users', function (req, res) {
     if (checkApiKey(res, req.query.apikey)) {
         res.json(users)
     }
+
 })
 
 app.get('/users/:id', function (req, res) {
@@ -87,6 +106,7 @@ app.post("/users", function (req, res) {
 
 app.put("/users/:id", function (req, res) {
     updateUser(res, req.params.id, req.body)
+    
 })
 
-app.listen(3000)
+app.listen(3100)
