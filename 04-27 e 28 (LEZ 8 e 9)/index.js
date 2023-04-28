@@ -89,4 +89,4 @@ app.put("/users/:id", function (req, res) {
     updateUser(res, req.params.id, req.body)
 })
 
-app.listen(3100)
+app.listen(3000)
