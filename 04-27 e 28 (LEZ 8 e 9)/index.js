@@ -14,7 +14,7 @@ Rimuovere un utente
 Aggiornare un utente
 */
 const express = require('express')
-const swaggerUi = require');
+const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger-output.json');
 const fs = require('fs');
 const { NOMEM } = require('dns');
@@ -41,7 +41,7 @@ function updateFile(){
     fs.writeFileSync("users.json",usersRaw)
 }
 
-function addUser(user) {
+function addUser(user, res) {
     user.id = users.length +1
     if (user.name == undefined) {
         res.status(400).send("Missing Name")
@@ -100,7 +100,7 @@ app.get('/users/:id', function (req, res) {
 })
 
 app.post("/users", function (req, res) {
-    addUser(req.body)
+    addUser(req.body, res)
     res.json(users)
 })
 

@@ -1,23 +1,8 @@
-/* Scrivere le api che gestiscano utenti
-Validare i seguenti campi affinchè siano tutti popolati
-
-Id
-Nome
-Cognome
-E-mail
-Password
-
-Controllare l'esistenza dell'utente nell'eliminazione e nell'aggiornamento
-
-Inserire un utente
-Rimuovere un utente
-Aggiornare un utente
-*/
+const crypto = require('crypto')
 const express = require('express')
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger-output.json');
 const fs = require('fs');
-const { NOMEM } = require('dns');
 
 let rawUsers = fs.readFileSync('users.json') 
 var users = JSON.parse(rawUsers)
@@ -25,6 +10,7 @@ console.log(users)
 
 const app = express()
 app.use(express.json())
+
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 const apiKey = "123456"
 
@@ -34,6 +20,12 @@ function checkApiKey(res, userApiKey) {
         return true
     }
     res.status(401).send("Non Autorizzato")
+}
+
+function hash(input){
+    return crypto.createHash('md5')
+    .update(input)
+    .digest('hex')
 }
 
 function updateFile(){
@@ -55,13 +47,26 @@ function addUser(user) {
         res.status(400).send("Missing Email")
         return
     }
-    if (user.password == undefined) {
-        res.status(400).send("Missing Password")
+    if (user.password == undefined || user.password.length < 3) {
+        res.status(400).send("Wrong Password")
         return
     }
 
+    user.password = hash(user.password)
     users.push(user)
     updateFile()
+}
+
+function removeUser(res, id){
+    let num = users.filter(user => user.id == id)
+    if(num == ""){
+        res.status(404).send("Missing Id")
+        return
+    }
+
+    users = users.filter(user => user.id != id)
+    updateFile()
+    res.json(users)
 }
 
 function updateUser(res, id, updatedUser) {
@@ -95,6 +100,7 @@ function updateUser(res, id, updatedUser) {
         res.status(400).send("Missing Password")
         return
     }
+    updatedUser.password = hash(updatedUser.password)
     users[index] = updatedUser
     updateFile()
     res.json(users)
@@ -116,13 +122,44 @@ app.get('/users/:id', function (req, res) {
 })
 
 app.post("/users", function (req, res) {
+    /*	#swagger.parameters['obj'] = {
+    in: 'body',
+    description: 'User information.',          
+    } */
     addUser(req.body)
     res.json(users)
+})
+
+app.post("/login", function (req, res) {
+    login = req.body
+    if (login.email == undefined) {
+        res.status(400).send("Missing Email")
+        return
+    }
+    if (login.password == undefined) {
+        res.status(400).send("Missing Password")
+        return
+    }
+
+    login.password = hash(login.password)
+
+    let loggedUser = users.find( user => user.email == login.email && user.password == login.password )
+    if (loggedUser == undefined){
+        res.status(401).send("Unauthorized")
+    }else{
+        res.send({ id: loggedUser.id})
+    }
+
 })
 
 app.put("/users/:id", function (req, res) {
     updateUser(res, req.params.id, req.body)
     
+})
+
+app.delete("/users/:id", function (req, res) {
+    removeUser(res, req.params.id)
+    res.json(users)
 })
 
 app.listen(3100)

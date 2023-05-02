@@ -29,7 +29,17 @@
       },
       "post": {
         "description": "",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "User information.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -69,6 +79,29 @@
             "type": "string"
           }
         ],
+        "responses": {}
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "description": "",
+        "parameters": [],
         "responses": {}
       }
     }
