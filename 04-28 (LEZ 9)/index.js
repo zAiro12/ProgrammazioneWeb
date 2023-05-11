@@ -33,7 +33,7 @@ function updateFile(){
     fs.writeFileSync("users.json",usersRaw)
 }
 
-function addUser(user) {
+function addUser(res, user) {
     user.id = users.length +1
     if (user.name == undefined) {
         res.status(400).send("Missing Name")
@@ -48,7 +48,7 @@ function addUser(user) {
         return
     }
     if (user.password == undefined || user.password.length < 3) {
-        res.status(400).send("Wrong Password")
+        res.status(400).send("Password is missing or too short")
         return
     }
 
@@ -59,7 +59,7 @@ function addUser(user) {
 
 function removeUser(res, id){
     let num = users.filter(user => user.id == id)
-    if(num == ""){
+    if(num == -1){
         res.status(404).send("Missing Id")
         return
     }
