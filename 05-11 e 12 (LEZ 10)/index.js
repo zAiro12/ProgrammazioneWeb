@@ -1,25 +1,21 @@
 const crypto = require('crypto')
 const express = require('express')
+var cors = require('cors')
+const auth = require('./auth').auth
 const swaggerUi = require('swagger-ui-express');
 const mongoClient = require('mongodb').MongoClient;
+const ObjectId = require('mongodb').ObjectId;
 const mongoUrl = "mongodb+srv://zairo:zairo@pwm.pkvpdx3.mongodb.net/?retryWrites=true&w=majority"
 const swaggerDocument = require('./swagger-output.json');
 const fs = require('fs');
+const { MongoClient, BSON } = require('mongodb');
 
 
 const app = express()
+app.use(cors())
 app.use(express.json())
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-const apiKey = "123456"
-
-
-function checkApiKey(res, userApiKey) {
-    if (userApiKey == apiKey) {
-        return true
-    }
-    res.status(401).send("Non Autorizzato")
-}
 
 function hash(input){
     return crypto.createHash('md5')
@@ -27,13 +23,7 @@ function hash(input){
     .digest('hex')
 }
 
-function updateFile(){
-    let usersRaw = JSON.stringify(users)
-    fs.writeFileSync("users.json",usersRaw)
-}
-
-function addUser(res, user) {
-    user.id = users.length +1
+async function addUser(res, user) {
     if (user.name == undefined) {
         res.status(400).send("Missing Name")
         return
@@ -52,37 +42,36 @@ function addUser(res, user) {
     }
 
     user.password = hash(user.password)
-    users.push(user)
-    updateFile()
+    
+    var pwmClient = await new MongoClient(mongoUrl).connect()
+
+    try{
+        var item = await pwmClient.db("pwm").collection("user").insertOne(user)
+        res.json(item)
+    }catch (e){
+        console.log("errore delete user")
+        if (e.code == 11000){
+            res.status(400).send("Utente già presente")
+        }
+        res.status(500).send(`Errore: ${e}`)
+    }
 }
 
-function removeUser(res, id){
-    let num = users.filter(user => user.id == id)
-    if(num == -1){
-        res.status(404).send("Missing Id")
+async function removeUser(res, id){
+    
+    var pwmClient = await new mongoClient(mongoUrl).connect()
+    var filter = { "_id": new ObjectId(id) }
+    
+    var delateUser = await pwmClient.db("pwm").collection("user").findOneAndDelete(filter)
+
+    if (delateUser.lastErrorObject.n ==0){
+        res.status(400).send("Utente non trovato")
         return
     }
-
-    users = users.filter(user => user.id != id)
-    updateFile()
-    res.json(users)
+    res.send(delateUser)
 }
 
-function updateUser(res, id, updatedUser) {
-    let index = users.findIndex(user => user.id == id)
-    if (index == -1) {
-        res.status(404).send("User not found")
-        return
-    }
-    if (updatedUser.id != id) {
-        res.status(400).send("Wrong Id")
-        return
-    }
-  
-    if (updatedUser.id == undefined) {
-        res.status(400).send("Missing Id")
-        return
-    }
+async function updateUser(res, id, updatedUser) {
     if (updatedUser.name == undefined) {
         res.status(400).send("Missing Name")
         return
@@ -100,41 +89,52 @@ function updateUser(res, id, updatedUser) {
         return
     }
     updatedUser.password = hash(updatedUser.password)
-    users[index] = updatedUser
-    updateFile()
-    res.json(users)
+    
+    try {
+
+        var pwmClient = await new mongoClient(mongoUrl).connect()
+        var filter = { "_id": new ObjectId(id) }
+        var updatedUserToInsert = { $set: updatedUser}
+
+        var item = await pwmClient.db("pwm").collection('users').updateOne(filter, updatedUserToInsert)
+        res.send(item)
+
+    } catch (e) {
+        console.log('catch in test');
+        if (e.code == 11000) {
+            res.status(400).send("Utente già presente")
+            return
+        }
+        res.status(500).send(`Errore generico: ${e}`)
+    };
+    
+
 }
 
-app.get('/users', function (req, res) {
-    mongoClient.connect(mongoUrl, function(err, db){
-        var bdogg = db.db("test")
-        bdogg.collection("user").find({}, function(err,result){
-            console.log(result)
-            res.send
-            db.close()
-        })
-    })
-
+app.get('/', function(req, res){
+    res.sendFile(path.join(__dirname, 'index.html'))
 })
 
-app.get('/users/:id', function (req, res) {
+app.get('/users', auth, async function (req, res) {
+    var pwmClient = await new MongoClient(mongoUrl).connect()
+    var item = await pwmClient.db("pwm").collection("user").find().project({"password":0}).toArray()
+    res.json(item)
+})
+
+app.get('/users/:id', auth, async function (req, res) {
     // Ricerca nel database
-    if (checkApiKey(res, req.query.apikey)) {
-        var user = users.filter(user => user.id == req.params.id)
-        res.json(user)
-    }
+    var id = req.params.id
+    var pwmClient = await new MongoClient(mongoUrl).connect()
+    var user = await pwmClient.db("pwm").collection("user").find({"_id": new ObjectId(id)}).project({"password" : 0}).toArray()
+
+    res.json(user)
 })
 
-app.post("/users", function (req, res) {
-    /*	#swagger.parameters['obj'] = {
-    in: 'body',
-    description: 'User information.',          
-    } */
-    addUser(req.body)
-    res.json(users)
+app.post("/users", auth, function (req, res) {
+    addUser(res, req.body)
 })
 
-app.post("/login", function (req, res) {
+app.post("/login", async function (req, res) {
     login = req.body
     if (login.email == undefined) {
         res.status(400).send("Missing Email")
@@ -147,23 +147,28 @@ app.post("/login", function (req, res) {
 
     login.password = hash(login.password)
 
-    let loggedUser = users.find( user => user.email == login.email && user.password == login.password )
-    if (loggedUser == undefined){
+    var pwmClient = await new MongoClient(mongoUrl).connect()
+    var filter = {$and:[{"email": login.email}, {"password": login.password}]}
+
+    var loggedUser = await pwmClient.db("pwm").collection("user").findOne(filter)
+    
+    if (loggedUser == null){
         res.status(401).send("Unauthorized")
     }else{
-        res.send({ id: loggedUser.id})
+        res.send({ id: loggedUser._id})
     }
 
 })
 
-app.put("/users/:id", function (req, res) {
+app.put("/users/:id", auth, function (req, res) {
     updateUser(res, req.params.id, req.body)
     
 })
 
-app.delete("/users/:id", function (req, res) {
+app.delete("/users/:id", auth, function (req, res) {
     removeUser(res, req.params.id)
-    res.json(users)
 })
 
-app.listen(3100)
+app.listen(3100, "0.0.0.0" ,()=>{
+    console.log("server start (3100)")
+})
