@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <!-- <link rel='stylesheet' type='text/css' media='screen' href='main.css'> -->
 </head>
-
 <body>
     <form>
         <input type="text" id="email" value="mario.rossi@email.com">
@@ -19,15 +21,19 @@
                 email: email,
                 password: password
             }
-            console.log(user)
-
-            fetch("127.0.0.1:3100/login",{
+            fetch("/login",{
                 method : 'POST',
                 headers : {'Content-Type' : 'application/json'},
                 body : JSON.stringify(user)
+            
             }).then(response => {
+
                 if (response.ok){
-                    alert("Benvenuto")
+                    fetch(`/login/${email}`)
+                    .then((risposta) => risposta.json())
+                    .then(utente => {
+                        alert(`Bentornato ${utente.name} ${utente.surname}`)
+                    })
                 }else{
                     alert("Non sei auterizzato")
                 }
@@ -36,7 +42,5 @@
         }
 
     </script>
-
 </body>
-
 </html>

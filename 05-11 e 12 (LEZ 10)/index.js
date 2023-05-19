@@ -8,6 +8,7 @@ const ObjectId = require('mongodb').ObjectId;
 const mongoUrl = "mongodb+srv://zairo:zairo@pwm.pkvpdx3.mongodb.net/?retryWrites=true&w=majority"
 const swaggerDocument = require('./swagger-output.json');
 const fs = require('fs');
+const path = require('path')
 const { MongoClient, BSON } = require('mongodb');
 
 
@@ -155,9 +156,21 @@ app.post("/login", async function (req, res) {
     if (loggedUser == null){
         res.status(401).send("Unauthorized")
     }else{
-        res.send({ id: loggedUser._id})
+        res.send(loggedUser)
     }
+})
 
+app.get("/login/:email", async function (req, res){
+    var email = req.params.email
+
+    var pwmClient = await new MongoClient(mongoUrl).connect()
+    var filter = {"email": email}
+    var user = await pwmClient.db("pwm").collection("user").findOne(filter)
+    if (user == null){
+        res.status(401).send("Non esiste")
+    }else{
+        res.json(user)
+    }
 })
 
 app.put("/users/:id", auth, function (req, res) {
