@@ -116,13 +116,15 @@
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(data)
-            }).then(async response => {
+            }).then(/*async*/ response => {
                 if (response.ok) {
-                    window.location.href = "login.html"
+                    window.location.href = "login.html?msg=Registrato"
                 } else {
-                    response.text().then( text =>
+                    response.text().then(text =>
                         alert(text)
                     )
+                    // var messaggio = await response.text()
+                    // alert(messaggio)
 
                 }
 

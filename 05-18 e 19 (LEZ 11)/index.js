@@ -129,6 +129,61 @@ async function updateUser(res, id, updatedUser) {
     };
 }
 
+
+async function addFavorites(res, id, movie_id) {
+  
+    try {
+
+        var pwmClient = await new mongoClient(uri).connect()
+
+        var filter = { "user_id": new ObjectId(id) }
+
+        var favorite = {
+            $push: {movie_ids: movie_id}
+        }
+        console.log(filter)
+        console.log(favorite)
+
+        var item = await pwmClient.db("pwm")
+            .collection('preferiti')
+            .updateOne(filter, favorite)
+
+        res.send(item)
+
+    } catch (e) {
+  
+        res.status(500).send(`Errore generico: ${e}`)
+
+    };
+}
+
+async function removeFavorites(res, id, movie_id) {
+  
+    try {
+
+        var pwmClient = await new mongoClient(uri).connect()
+
+        var filter = { "user_id": new ObjectId(id) }
+
+        var favorite = {
+            $pull: {movie_ids: movie_id}
+        }
+        console.log(filter)
+        console.log(favorite)
+
+        var item = await pwmClient.db("pwm")
+            .collection('preferiti')
+            .updateOne(filter, favorite)
+
+        res.send(item)
+
+    } catch (e) {
+  
+        res.status(500).send(`Errore generico: ${e}`)
+
+    };
+}
+
 app.get('/users', auth, async function (req, res) {
     var pwmClient = await new mongoClient(uri).connect()
     var users = await pwmClient.db("pwm").collection('users').find().project({ "password": 0 }).toArray();
@@ -158,26 +213,25 @@ app.post("/login", async (req, res) => {
 
     var pwmClient = await new mongoClient(uri).connect()
     var filter = {
-        $and : [
-            {"email": login.email},
-            {"password": login.password}
+        $and: [
+            { "email": login.email },
+            { "password": login.password }
         ]
     }
     var loggedUser = await pwmClient.db("pwm")
-    .collection('users')
-    .findOne(filter);
+        .collection('user')
+        .findOne(filter);
     console.log(loggedUser)
 
 
     if (loggedUser == null) {
         res.status(401).send("Unauthorized")
     } else {
-        res.send({ loggedUser })
+        res.json(loggedUser)
     }
 
 }
 )
-
 
 app.put("/users/:id", auth, function (req, res) {
     updateUser(res, req.params.id, req.body)
@@ -190,6 +244,37 @@ app.delete("/users/:id", auth, function (req, res) {
 app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, '/index.html'));
 });
+
+
+app.get('/favorites/:id', async (req, res)=>{
+     // Ricerca nel database
+     var id = req.params.id
+     var pwmClient = await new mongoClient(uri).connect()
+     var favorites = await pwmClient.db("pwm")
+         .collection('preferiti')
+         .findOne({ "user_id": new ObjectId(id) })
+     res.json(favorites)
+})
+
+app.post('/favorites/:id', async (req, res)=>{
+    // Ricerca nel database
+    var id = req.params.id
+    movie_id = req.body.movie_id
+    console.log(movie_id)
+    console.log(id)
+    addFavorites(res,id,movie_id)
+
+})
+app.delete('/favorites/:id', async (req, res)=>{
+    // Ricerca nel database
+    var id = req.params.id
+    movie_id = req.body.movie_id
+    console.log(movie_id)
+    console.log(id)
+    removeFavorites(res,id,movie_id)
+
+})
+
 
 app.listen(3100, "0.0.0.0", () => {
     console.log("Server partito porta 3100")
