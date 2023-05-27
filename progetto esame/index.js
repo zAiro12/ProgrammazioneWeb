@@ -4,7 +4,7 @@ const crypto = require('crypto')
 const express = require('express')
 const ObjectId = require('mongodb').ObjectId
 const swaggerUi = require('swagger-ui-express')
-const { MongoClient, BSON } = require('mongodb');
+const { MongoClient, BSON } = require('mongodb')
 const mongoClient = require('mongodb').MongoClient
 const swaggerDocument = require('./swagger-output.json')
 
@@ -27,8 +27,10 @@ app.get('/',  (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'))
 })
 
-app.get('/ciao',  (req, res) => {
-    res.send("ciao!")
+app.get('/ciao', async (req, res) => {
+    var pwmClient = await new MongoClient(mongoUrl).connect()
+    var users = await pwmClient.db("progetto").collection("utenti").find().toArray()
+    res.json(users)
 })
 
 app.listen(port, "0.0.0.0" , () => {
