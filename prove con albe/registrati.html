@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script src='main.js'></script>
+</head>
+
+<body> 
+    <style>
+
+        *{
+            margin: 0;
+            padding: 0;
+        }
+
+        input{
+            width: 200px;
+            height: 60px;
+            font-size: 24px;
+        }
+
+        button{
+            width: 828px;
+            height: 60px;
+            font-size: 24px;
+            margin-top: 10px;
+        }
+
+    </style>
+    <h6 id="token"></h6>
+    
+    <div style="margin-top: 100px;"></div>
+    <input type="text" id="nome" placeholder="nome" value="luce">
+    <input type="text" id="cognome" placeholder="cognome" value="airoldi">
+    <input type="email" id="email" placeholder="email" value="lucaairoldi92@gmail.com">
+    <input type="text" id="password" placeholder="password" value="perrygay">
+    <button onclick="registra()">invia</button>
+    
+    <script>
+        function registra(){
+            var nome = document.getElementById("nome").value
+            var cognome = document.getElementById("cognome").value
+            var email = document.getElementById("email").value
+            var password = document.getElementById("password").value
+
+            user = {
+                nome: nome, 
+                cognome: cognome,
+                email: email,
+                password: password
+            }
+            
+            fetch("http://127.0.0.1:3000/registrati", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(user)
+            })
+            .then(response => response.json())
+            .then(logged_user => {
+                localStorage.setItem("user", JSON.stringify(logged_user))
+                window.location.href = "index.html"
+            })
+        }
+    </script>
+</body>
+
+</html>

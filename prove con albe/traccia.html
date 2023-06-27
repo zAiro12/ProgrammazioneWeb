@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Traccia</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script src='main.js'></script>
+</head>
+<body>
+    <button onclick="prova()" style="background-color: red;">ciao</button>
+
+    <h1 id="nomeTraccia"></h1>
+    <h2 id="nomeArtista"></h2>
+    <h3 id="nomeAlbum"></h3>
+    <img id="copertina">
+
+    <script src="utils.js"></script>
+    <script>
+        const spotifybasicurl = "https://api.spotify.com/v1"
+        const linguaIT = "?market=IT"
+        var id = "7CufDALaisOBzcT0nfeaZF"
+        function prova(){
+                fetch(`${spotifybasicurl}/tracks/${id}${linguaIT}`, {
+            headers:{Authorization: "Bearer " + "BQD3SzUgmgnqP0_QRZ2ANXJlTcXNZ9IyJTqnJP_MKUvb3jfiw1dIkTMoYLJEFFkX_GsstT91yPXUkMewwyOiU-nAfkx_gI_scQg1XZJRa60lbEzSGLE"}
+        })
+            .then(response => {
+                if (!response.ok) {
+                    response.json().then(data => res.status(401).send(data.status_message))
+                    return
+                }
+                response.json()
+            
+            
+                .then(ris => {
+                    
+                    // res.send(ris)
+                    console.log(ris)
+                    
+                    // if (get == "album"){
+                    //     mostraAlbum(ris)
+                    // }else if (get == "tracks"){
+                    //     mostraTraccia(ris)
+                    // }
+
+                    mostraTraccia(ris)
+                })
+            })
+            .catch(error => res.status(401).send(error))
+            }
+
+            function mostraTraccia(risposta){
+                var traccia = document.getElementById("nomeTraccia")
+                var artista = document.getElementById("nomeArtista")
+                var album = document.getElementById("nomeAlbum")
+                var img = document.getElementById("copertina")
+
+                console.log(risposta.album.artists)
+                // traccia.innerHTML = risposta.album.items.artist.name
+                artista.innerHTML = risposta.album.artists[0].name
+                album.innerHTML = risposta.album.name
+                // console.log(risposta.album.images)
+    // img.src = risposta.album.images
+}
+    </script>
+</body>
+</html>
