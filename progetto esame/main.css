@@ -1,0 +1,211 @@
+@import url('https://fonts.googleapis.com/css2?family=Rock+3D&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Rock+3D&display=swap');
+
+:root{
+    --backgroud: #F7FFE0;
+    --arancione: #ff7433;
+    --grigio: #495867;
+    --giallo: #F2EFC7;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    background-color: var(--giallo);
+}
+
+
+
+/* ---------------- navbar ----------------*/
+
+nav{
+    background-color: var(--grigio); 
+    border-radius: 0 0 20px 20px ;
+    font-size: 20px;
+    box-shadow: 0 2px 3px 0 rgba(0,0,0, 1);
+}
+
+nav a, nav button span{
+    font-size: 25px;
+    text-transform: uppercase;
+    color: var(--arancione) !important;
+    text-decoration: none;
+    line-height: 50px;
+    z-index: 1;
+    display: inline-block;
+    text-align: center;
+    padding: 20px 10px;
+    margin: 0 5px;
+    font-family: 'Rock 3D', cursive;
+}
+
+nav a:hover, nav button:hover{
+    background-color: rgba(255,116,51, 0.7);
+    color: var(--grigio) !important;
+    border-radius: 10px;
+}
+
+.attivo{
+    background-color: rgba(255,116,51, 0.7);
+    color: var(--grigio) !important;
+    border-radius: 10px;
+}
+
+.mb-3 > button{
+    background-color: var(--grigio);
+    border: none;
+}
+.mb-3 > button:hover{
+    background-color: var(--arancione);
+    transform: scale(1.05);
+}
+
+
+
+/* ---------------- login ----------------*/
+
+.container-login{
+    /* border: 1px solid black; */
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+
+}
+
+.form-text{
+    display: flex !important;
+}
+
+.form-text > div{
+    color: blue !important;
+    cursor: pointer;
+    text-decoration: underline !important;
+    margin-left: 4px;
+}
+
+.form-text > div:hover{
+    transform: scale(1.05);
+}
+
+.invalid{
+    animation: shake 0.2s 2;
+}
+
+input[type="text"] {
+    border: none;
+    outline: none;
+}
+.valido-login{
+    border: 3px solid green !important;
+}
+
+.okpass-login{
+    text-decoration: line-through;
+    color: green;
+}
+
+.nopass-login{
+    text-decoration: none;
+    color: red;
+}
+
+
+/* ---------------- utente ----------------*/
+
+.utente-attivo{
+    /* box-shadow: 0px 0px 20px #ff7433; */
+    text-decoration: underline;
+    transform: scale(1.05);
+}
+
+.utente-dx, .utente-sx{
+    padding: 20px;
+    text-align: center !important;
+    display: block;
+}
+
+.utente-dx > div{
+    padding: 10px;
+    margin: 10px;
+    font-size: 25px;
+    text-transform: uppercase;
+    font-weight: 500;
+    width: fit-content;
+    border-radius: 25px;
+    font-weight: 600;
+}
+
+.linea-utente{
+    display: none;
+}
+
+#profiloUtente, #logoutUtente{
+    text-align: center !important;
+}
+
+#logoutUtenteDiv{
+    display: none;
+}
+
+.titolo-utente{
+    color: var(--arancione);
+    text-transform: uppercase;
+    margin-top: 20px;
+}
+.utente-logout{
+    cursor: pointer;
+}
+
+.utente-scelta{
+    display: flex;
+    justify-content: center
+}
+
+.utente-scelta > div{
+    margin: 50px 20px;
+    padding: 10px;
+    font-size: 30px;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.utente-scelta > div:hover{
+    transform: scale(1.05);
+}
+
+@keyframes shake {
+    25%{
+        translate: 6px 0;
+    }
+
+    50%{
+        translate: -6px 0;
+    }
+
+    75%{
+        translate: 6px 0;
+    }
+}
+
+
+
+@media screen and (max-width: 576px) {
+
+    /* utente */
+    .utente-dx{
+        display: none;
+    }
+
+    .linea-utente{
+        display: block;
+        margin: 50px 0;
+    }
+
+    #logoutUtenteDiv{
+        display: block;
+    }
+
+}

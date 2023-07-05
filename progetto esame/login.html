@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="it-ITA">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>zAirfy</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+</head>
+<body onload="caricamento('nav-login')">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+
+    <!-- navbar -->
+    <div id="navbar"></div>
+
+    <div class="alert alert-danger m-3 text-center d-none" id="log-errore"></div>
+
+    <div class="container-lg mt-2 p-5">
+        <div class="row">
+            <div class="col-md-3"></div>
+
+            <div class="col-md-6 container-login">
+                <div id="login" class="login">
+                    <h2 class="text-center">Login utente</h2>
+
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="log-id" class="form-label">Username o Indirizzo Email</label>
+                            <input type="text" class="form-control" id="log-id" autocomplete ="email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="log-password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="log-password" autocomplete="new-password">
+                        </div>
+                        <div class="form-text">Non hai un account? <div onclick="cambialog()">Registrati ora</div></div>
+                        <div class="mb-3 text-end">
+                            <button type="submit" class="btn btn-primary" onclick="login()">Invio</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="registrati" class="registrati" style="display: none;">
+                    <h2 class="text-center">Registrazione utente</h2>
+                    <form id="registrazioneForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="nome">Nome</label>
+                                    <input type="text" id="nome" class="form-control" name="name" autocomplete="name" autocapitalize="words" pattern="+[a-z]">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="cognome">Cognome</label>
+                                    <input type="text" id="cognome" class="form-control" name="surname" autocomplete="family-name" autocapitalize="words" pattern="+[a-z]">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="username" class="form-label">Username</label>
+                                    <input type="text" class="form-control" id="username" autocomplete="username" onkeyup="cercausername(this.value)" pattern="+[a-z0-9_-]">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="email" class="form-label">Indirizzo Email</label>
+                                    <input type="email" class="form-control" id="email" autocomplete="email" onkeyup="cercamail(this.value)">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="password">Password</label>
+                                    <input type="password" id="password" class="form-control" name="password" autocomplete="new-password" onkeyup="controllapassword(this.value)">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="conferma">Conferma password</label>
+                                    <input type="password" id="conferma" class="form-control" name="conferma" autocomplete="current-password">
+                                </div>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <ul>
+                                    <li><span id="8charLogin" class="form-text">La password deve essere lunga almeno 8 caratteri</span></li>
+                                    <li><span id="maiusLogin" class="form-text">La password deve contenere almeno una maiuscola</span></li>
+                                    <li><span id="numLogin" class="form-text">La password deve contenere almeno un numero</span></li>
+                                    <li><span id="specLogin" class="form-text">La password deve contenere almeno un carattere speciale</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="form-text">Hai già un account? <div onclick="cambialog()">Accedi</div></div>
+                        <div class="mb-3 text-end">
+                            <button type="submit" class="btn btn-primary " onclick="registrati()">Invio</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+            <div class="col-md-3"></div>
+        </div>
+
+    </div>
+
+    <script>
+
+    </script>
+    
+    <script src='main.js'></script>
+    <script src='elementi.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>    
+</body>
+</html>
