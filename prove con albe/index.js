@@ -123,7 +123,7 @@ app.get("/tango", async (req, res) => {
         headers:{Authorization: "Bearer " + apitoken}
    })
    .then(response => response.json())
-   .then(traccia => res.send(traccia.name))
+   .then(traccia => res.send(traccia))
 });
 
 app.post("/registrati", async (req, res) =>{

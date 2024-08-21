@@ -65,7 +65,7 @@ async function removeUser(res, id){
     
     var delateUser = await pwmClient.db("pwm").collection("user").findOneAndDelete(filter)
 
-    if (delateUser.lastErrorObject.n ==0){
+    if (delateUser.lastErrorObject.n == 0){
         res.status(400).send("Utente non trovato")
         return
     }
